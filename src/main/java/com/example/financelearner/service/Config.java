@@ -22,7 +22,10 @@ public class Config extends Application {
     @Override
     public Set<Class<?>> getClasses() {
         HashSet providers = new HashSet<Class<?>>();
-        providers.add(Finance.class);
+        providers.add(Stocks.class);
+        providers.add(Investments.class);
+        providers.add(Watchlist.class);
+        providers.add(MoneyService.class);
         return providers;
     }
 

@@ -1,75 +1,152 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" id="html">
 <head>
     <meta charset="UTF-8">
     <title>Stock</title>
     <link rel="stylesheet" href="css/main.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <script src="js/stock.js"></script>
     <link rel="icon" href="images/logo.png">
 </head>
 <body>
-    <header class="site-header">
+    <nav class="site-header">
         <div class="site-identity">
             <a href="./"><img src="./images/logo.png" alt="logo" /></a>
         </div>
-        <nav class="site-navigation">
-            <ul class="nav">
-                <li><a href="./">Home</a></li>
-            </ul>
-        </nav>
-    </header>
-    <main>
-        <div class='loading' id="loader">
-            <span class='dot dot-1'></span>
-            <span class='dot dot-2'></span>
-            <span class='dot dot-3'></span>
-            <span class='dot dot-4'></span>
+        <label for="inp" class="inp">
+            <input type="text" id="inp" placeholder="&nbsp;">
+            <span class="label" id="label">Symbol</span>
+            <span class="focus-bg"></span>
+            <script>
+                var input = document.getElementById("inp");
+                input.addEventListener("keypress", function(event) {
+                    if (event.key === "Enter") {
+                        event.preventDefault();
+                        window.location.href = "./stock.html?symbol=" + input.value
+                    }
+                });
+            </script>
+        </label>
+        <div class="site-menu">
+            <a href="./">Home</a>
         </div>
+    </nav>
+    <main>
         <div class="detailedStock" id="detailedStock">
-            <h2 class="name" id="name" style="margin-bottom: 0;"></h2>
+            <div style="display: flex; justify-content: space-between">
+                <div style="display: flex; width: 40%">
+                    <h2 class="name" id="name"></h2>
+                    <div class="fa fa-star" style="visibility: hidden" id="star" onclick="updateWatchlist()"></div>
+                </div>
+                <div style="width: 20%">
+                    <h2 style="display: flex; justify-content: space-between">
+                        <button class="transactionBtn" id="buy" style="background-color: #9eff9e; border-color: #51f851">
+                            <h2>Buy</h2></button>
+                        <button class="transactionBtn" id="sell" style="background-color: #ff9e9e; border-color: #f85151">
+                            <h2>Sell</h2></button>
+                    </h2>
+                </div>
+            </div>
             <div class="values">
                 <h2 class="value" id="value"></h2>
                 <h3 class="change" id="change" ></h3>
             </div>
         </div>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js "></script>
-        <body>
-        <div class="timeframes" id="timeframes">
-            <ul>
-                <li onclick="activateBtn(document.getElementById('5')); showChart(5);">
-                    <button id="5">
-                        5d
-                    </button>
-                </li>
-                <li onclick="activateBtn(document.getElementById('10')); showChart(10)">
-                    <button id="10">
-                        10d
-                    </button>
-                </li>
-                <li onclick="activateBtn(document.getElementById('30')); showChart(30)">
-                    <button id="30">
-                        30d
-                    </button>
-                </li>
-                <li onclick="activateBtn(document.getElementById('365')); showChart(365)">
-                    <button id="365">
-                        1y
-                    </button>
-                </li>
-                <li onclick="activateBtn(document.getElementById('1825')); showChart(1825)">
-                    <button id="1825">
-                        5y
-                    </button>
-                </li>
-                <li onclick="activateBtn(document.getElementById('max')); showChart('max')">
-                    <button id="max">
-                        max
-                    </button>
-                </li>
-            </ul>
+        <div class='loading' id="loader" style="padding-top: 10%">
+            <span class='dot dot-1'></span>
+            <span class='dot dot-2'></span>
+            <span class='dot dot-3'></span>
+            <span class='dot dot-4'></span>
         </div>
-        <canvas id="chart" style="width:100%;max-width:600px"></canvas>
+        <div class="stock">
+            <div class="stockOverview">
+                <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js "></script>
+                <div class="timeframes" id="timeframes">
+                    <ul>
+                        <li onclick="activateBtn(document.getElementById('5')); showChart(5);">
+                            <button id="5">
+                                5d
+                            </button>
+                        </li>
+                        <li onclick="activateBtn(document.getElementById('10')); showChart(10)">
+                            <button id="10">
+                                10d
+                            </button>
+                        </li>
+                        <li onclick="activateBtn(document.getElementById('30')); showChart(30)">
+                            <button id="30">
+                                30d
+                            </button>
+                        </li>
+                        <li onclick="activateBtn(document.getElementById('365')); showChart(365)">
+                            <button id="365">
+                                1y
+                            </button>
+                        </li>
+                        <li onclick="activateBtn(document.getElementById('1825')); showChart(1825)">
+                            <button id="1825">
+                                5y
+                            </button>
+                        </li>
+                        <li onclick="activateBtn(document.getElementById('max')); showChart('max')">
+                            <button id="max">
+                                max
+                            </button>
+                        </li>
+                    </ul>
+                </div>
+                <canvas id="chart" style="width:100%;"></canvas>
+            </div>
+            <div class="stockDetails" id="stockDetails" style="visibility: hidden">
+                <h2>Kursdaten</h2>
+                <div class="tables">
+                    <table class="courseData">
+                        <tr>
+                            <td class="tableDescription">Wert</td>
+                            <td class="tableValues" id="currentValue"></td>
+                        </tr>
+                        <tr>
+                            <td class="tableDescription">+/-</td>
+                            <td class="tableValues" id="statsChange"></td>
+                        </tr>
+                        <tr>
+                            <td class="tableDescription">Bid</td>
+                            <td class="tableValues" id="bid"></td>
+                        </tr>
+                        <tr>
+                            <td class="tableDescription">Hoch</td>
+                            <td class="tableValues" id="high"></td>
+                        </tr>
+                        <tr>
+                            <td class="tableDescription">Volumen</td>
+                            <td class="tableValues" id="volume"></td>
+                        </tr>
 
+                    </table>
+                    <table class="courseData">
+                        <tr>
+                            <td class="tableDescription">1.1.2022</td>
+                        </tr>
+                        <tr>
+                            <td class="tableDescription">Schluss</td>
+                            <td class="tableValues" id="previousClose"></td>
+                        </tr>
+                        <tr>
+                            <td class="tableDescription">Ask</td>
+                            <td class="tableValues" id="ask"></td>
+                        </tr>
+                        <tr>
+                            <td class="tableDescription">Tief</td>
+                            <td class="tableValues" id="low"></td>
+                        </tr>
+                        <tr>
+                            <td class="tableDescription">Ø-Volumen</td>
+                            <td class="tableValues" id="avgVolume"></td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
     </main>
 </body>
 </html>

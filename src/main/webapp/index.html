@@ -9,25 +9,93 @@
 </head>
 
 <body>
-    <header class="site-header">
+    <nav class="site-header">
         <div class="site-identity">
             <a href="./"><img src="./images/logo.png" alt="logo" /></a>
         </div>
-        <nav class="site-navigation">
-            <ul class="nav">
-                <li><a href="./">Home</a></li>
-            </ul>
-        </nav>
-    </header>
+        <label for="inp" class="inp">
+            <input type="text" id="inp" placeholder="&nbsp;">
+            <span class="label" id="label">Symbol</span>
+            <span class="focus-bg"></span>
+            <script>
+                var input = document.getElementById("inp");
+                input.addEventListener("keypress", function(event) {
+                    if (event.key === "Enter") {
+                        event.preventDefault();
+                        window.location.href = "./stock.html?symbol=" + input.value
+                    }
+                });
+            </script>
+        </label>
+        <div class="site-menu">
+            <a href="./">Home</a>
+        </div>
+    </nav>
+    <nav class="dataHeader">
+        <div class="moneyData">
+            <div class="money" style="width: 50%">
+                <div class="innerMoney">
+                    <p class="absoluteValue" id="balance"></p>
+                    <p class="description">Kontoguthaben</p>
+                </div>
+                <div class="innerMoney">
+                    <p class="absoluteValue" id="portfolio"></p>
+                    <p class="description">Portfolio</p>
+                </div>
+                <div class="innerMoney">
+                    <p class="absoluteValue" id="available"></p>
+                    <p class="description">USD</p>
+                </div>
+            </div>
+            <div class="money" style="width: 25%;">
+                <div class="innerMoney">
+                    <p class="absoluteValue" id="absoluteChange"></p>
+                    <p class="description">G/V Absolut</p>
+                </div>
+            </div>
+            <div class="money" style="width: 25%;">
+                <div class="innerMoney">
+                    <p class="absoluteValue" id="relativeChange"></p>
+                    <p class="description">G/V Relativ</p>
+                </div>
+            </div>
+        </div>
+        <div class="moneyNavigation">
+            <div class="positions">
+                <a href="./nothereyet">
+                    Geschlossene Positionen
+                </a>
+            </div>
+            <div class="transactions">
+                <a href="./nothereyet">
+                    Letzte Transaktionen
+                </a>
+            </div>
+        </div>
+    </nav>
     <main>
         <h1>Welcome to the Finance Learner!</h1>
-        <div class='loading' id="loader">
-            <span class='dot dot-1'></span>
-            <span class='dot dot-2'></span>
-            <span class='dot dot-3'></span>
-            <span class='dot dot-4'></span>
+        <h2 id="money"></h2>
+        <div class="feed">
+            <div class="feedItem" id="watchlist">
+                <h3>Watchlist</h3>
+                <div class='loading' id="watchlistLoader">
+                    <span class='dot dot-1'></span>
+                    <span class='dot dot-2'></span>
+                    <span class='dot dot-3'></span>
+                    <span class='dot dot-4'></span>
+                </div>
+            </div>
+            <div class="feedItem" id="investments">
+                <h3>Invested</h3>
+                <div class='loading' id="investedlistLoader">
+                    <span class='dot dot-1'></span>
+                    <span class='dot dot-2'></span>
+                    <span class='dot dot-3'></span>
+                    <span class='dot dot-4'></span>
+                </div>
+            </div>
         </div>
-        <div class="stocks" id="stocks"></div>
     </main>
 </body>
 </html>
