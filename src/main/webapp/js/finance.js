@@ -34,12 +34,36 @@ function readInvestments() {
         })
         .then(response => response.json())
         .then(data => {
-            showInvestments(data);
+            let investments = new Array();
+            let doubleInvestments = new Array();
+            for (let i = 0; i < data.length; i++) {
+                if (!containsObject(data[i], investments)){
+                    investments.push(data[i])
+                } else {
+                    var result = investments.findIndex(investment => investment.symbol === data[i].symbol);
+                    if (investments[result].addedProfit){
+                        investments[result]["addedProfit"] += investments[result].currentPrice - data[i].buyPrice;
+                    } else {
+                        investments[result]["addedProfit"] = investments[result].currentPrice - data[i].buyPrice;
+                    }
+                }
+            }
+            console.log(investments)
+            showInvestments(investments);
             calculateMoney(data);
         })
         .catch(function (error) {
             console.log(error);
         });
+}
+
+function containsObject(obj, list){
+    for (let i = 0; i < list.length; i++) {
+        if (list[i].symbol === obj.symbol) {
+            return true;
+        }
+    }
+    return false;
 }
 
 function calculateMoney(investmentData){
@@ -60,14 +84,12 @@ function calculateMoney(investmentData){
                 change += Math.round((investmentData[i].currentPrice - investmentData[i].buyPrice) * 100) / 100;
                 changePercent += (investmentData[i].currentPrice - investmentData[i].buyPrice)
                     / investmentData[i].buyPrice * 100;
-                console.log((3800 - 3000)
-                    / 3000 * 100)
                 portfolio += investmentData[i].currentPrice;
             }
             changePercent = Math.round(changePercent * 100) / 100
             showValues({absoluteMoney, portfolio, money, change, changePercent})
             if (changePercent >= 0) changePercent = "+" + changePercent
-            document.getElementById("money").innerHTML = "USD " + money + " "
+            document.getElementById("money").innerHTML = "USD " + Math.round(money * 100) / 100 + " "
             let changeDiv = getChangeElement(change, change + "(" + changePercent + "%)")
             document.getElementById("money").appendChild(changeDiv)
         })
@@ -77,32 +99,39 @@ function calculateMoney(investmentData){
 }
 
 function showValues(data){
-    document.getElementById("balance").innerHTML = data.money + "$"
-    document.getElementById("portfolio").innerHTML = data.portfolio + "$"
-    document.getElementById("available").innerHTML = data.absoluteMoney + "$"
+    document.getElementById("balance").innerHTML = Math.round(data.money * 100) / 100 + "$"
+    document.getElementById("portfolio").innerHTML = Math.round(data.portfolio * 100) / 100 + "$"
+    document.getElementById("available").innerHTML = Math.round(data.absoluteMoney * 100) / 100 + "$"
     let absoluteChange = getChangeElement(data.change, data.change + "$")
     document.getElementById("absoluteChange").appendChild(absoluteChange)
-    let relativeChange = getChangeElement(data.changePercent, data.changePercent + "%")
+    let relativeChange = getChangeElement(Math.round(data.changePercent * 100) / 100, Math.round(data.changePercent * 100) / 100 + "%")
     document.getElementById("relativeChange").appendChild(relativeChange)
 }
 
-function showInvestments(data) {
+function showInvestments(investments) {
     document.getElementById("investedlistLoader").style.display = "none";
     let tBody = document.getElementById("investments");
-    for (let i = 0; i < data.length; i++) {
+    for (let i = 0; i < investments.length; i++) {
         let stock = document.createElement("a")
-        stock.href = window.location.href + "stock.html?symbol=" + data[i].symbol;
+        stock.href = window.location.href + "stock.html?symbol=" + investments[i].symbol;
         stock.style.color = "black";
         stock.style.textDecoration = "none";
-        stock.innerHTML = data[i].name + " (" + data[i].symbol + "): " + data[i].currentPrice + " USD (";
-        let change = Math.round((data[i].currentPrice - data[i].buyPrice) * 100) / 100;
+        stock.innerHTML = investments[i].name + " (" + investments[i].symbol + "): " + investments[i].currentPrice +
+            " USD (";
+        let change;
+        if (investments[i].addedProfit){
+            change = Math.round(((investments[i].currentPrice - investments[i].buyPrice) +
+                investments[i].addedProfit) * 100) / 100;
+        } else {
+            change = Math.round((investments[i].currentPrice - investments[i].buyPrice) * 100) / 100;
+        }
         let changeDiv = getChangeElement(change, change);
         stock.appendChild(changeDiv)
         stock.innerHTML += ")"
         let linebreak = document.createElement("br");
         tBody.appendChild(stock)
         tBody.appendChild(linebreak)
-    };
+    }
 }
 
 

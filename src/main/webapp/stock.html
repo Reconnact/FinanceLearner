@@ -34,15 +34,17 @@
     <main>
         <div class="detailedStock" id="detailedStock">
             <div style="display: flex; justify-content: space-between">
-                <div style="display: flex; width: 40%">
+                <div style="display: flex; width: 100%">
                     <h2 class="name" id="name"></h2>
                     <div class="fa fa-star" style="visibility: hidden" id="star" onclick="updateWatchlist()"></div>
                 </div>
                 <div style="width: 20%">
                     <h2 style="display: flex; justify-content: space-between">
-                        <button class="transactionBtn" id="buy" style="background-color: #9eff9e; border-color: #51f851">
+                        <button class="transactionBtn" id="buy" style="background-color: #9eff9e; border-color: #51f851"
+                        onclick="buy()">
                             <h2>Buy</h2></button>
-                        <button class="transactionBtn" id="sell" style="background-color: #ff9e9e; border-color: #f85151">
+                        <button class="transactionBtn" id="sell" style="background-color: #ff9e9e; border-color: #f85151"
+                                onclick="sell()">
                             <h2>Sell</h2></button>
                     </h2>
                 </div>
@@ -78,12 +80,12 @@
                                 30d
                             </button>
                         </li>
-                        <li onclick="activateBtn(document.getElementById('365')); showChart(365)">
+                        <li onclick="activateBtn(document.getElementById('365')); showChart('1Y')">
                             <button id="365">
                                 1y
                             </button>
                         </li>
-                        <li onclick="activateBtn(document.getElementById('1825')); showChart(1825)">
+                        <li onclick="activateBtn(document.getElementById('1825')); showChart('5Y')">
                             <button id="1825">
                                 5y
                             </button>
@@ -98,11 +100,11 @@
                 <canvas id="chart" style="width:100%;"></canvas>
             </div>
             <div class="stockDetails" id="stockDetails" style="visibility: hidden">
-                <h2>Kursdaten</h2>
+                <h2>Stock data</h2>
                 <div class="tables">
                     <table class="courseData">
                         <tr>
-                            <td class="tableDescription">Wert</td>
+                            <td class="tableDescription">Value</td>
                             <td class="tableValues" id="currentValue"></td>
                         </tr>
                         <tr>
@@ -114,11 +116,11 @@
                             <td class="tableValues" id="bid"></td>
                         </tr>
                         <tr>
-                            <td class="tableDescription">Hoch</td>
+                            <td class="tableDescription">High</td>
                             <td class="tableValues" id="high"></td>
                         </tr>
                         <tr>
-                            <td class="tableDescription">Volumen</td>
+                            <td class="tableDescription">Volume</td>
                             <td class="tableValues" id="volume"></td>
                         </tr>
 
@@ -128,7 +130,7 @@
                             <td class="tableDescription">1.1.2022</td>
                         </tr>
                         <tr>
-                            <td class="tableDescription">Schluss</td>
+                            <td class="tableDescription">Close</td>
                             <td class="tableValues" id="previousClose"></td>
                         </tr>
                         <tr>
@@ -136,11 +138,11 @@
                             <td class="tableValues" id="ask"></td>
                         </tr>
                         <tr>
-                            <td class="tableDescription">Tief</td>
+                            <td class="tableDescription">Low</td>
                             <td class="tableValues" id="low"></td>
                         </tr>
                         <tr>
-                            <td class="tableDescription">Ø-Volumen</td>
+                            <td class="tableDescription">Ø-Volume</td>
                             <td class="tableValues" id="avgVolume"></td>
                         </tr>
                     </table>

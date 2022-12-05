@@ -4,6 +4,7 @@ document.addEventListener("DOMContentLoaded", () => {
 let data = null;
 let watchlist = false;
 let symbol = null;
+let transactionType = "buy";
 function readStock() {
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
@@ -92,26 +93,43 @@ function activateBtn(e){
 function showChart(days){
         import("https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js")
         const ctx = document.getElementById('chart').getContext('2d');
+        ctx.clearRect(0, 0, document.getElementById('chart').width,
+            document.getElementById('chart').height);
         let values = []
         let dates = []
         let backgroundColor = "rgb(154,169,148)";
         let color = "rgb(62,122,0)";
-        if(days == "max" || days > data.history.length){
-            days = data.history.length
+        var date = new Date();
+
+        if (days == "1Y"){
+            date.setFullYear(date.getFullYear() - 1);
+        } else if (days == "5Y"){
+            date.setFullYear(date.getFullYear() - 5);
+        } else if (days != "max") {
+            date = new Date(data.history[data.history.length - (days - 1)].date)
         }
-        if (data.history[data.history.length-days].close > data.quote.price){
-            color = "rgb(255,0,0)";
-            backgroundColor = "rgb(255,213,213)";
-        }
-        for (let i = data.history.length-days; i < data.history.length; i++) {
+        for (let i = data.history.length-1; date <= data.history[i].date; i--) {
             let currentDate = new Date(data.history[i].date);
             dates[values.length] = currentDate.getDate() + "." + (currentDate.getMonth() + 1) + "." + currentDate.getFullYear()
             values[values.length] = data.history[i].close;
-
         }
+        values.reverse();
+        dates.reverse();
+        if (values[0] > data.quote.price){
+
+            color = "rgb(255,0,0)";
+            backgroundColor = "rgb(255,213,213)";
+        }
+        if(days == "max" || days > data.history.length){
+            for (let i = 0; i < data.history.length; i++) {
+                let currentDate = new Date(data.history[i].date);
+                dates[values.length] = currentDate.getDate() + "." + (currentDate.getMonth() + 1) + "." + currentDate.getFullYear()
+                values[values.length] = data.history[i].close;
+            }
+        }
+        date = new Date();
         values[values.length] = data.quote.price
-        currentDate = new Date();
-        dates[dates.length] = currentDate.getDate() + "." + (currentDate.getMonth() + 1) + "." + currentDate.getFullYear()
+        dates[dates.length] = date.getDate() + "." + (date.getMonth() + 1) + "." + date.getFullYear()
         const myChart = new Chart(ctx, {
             type: 'line',
             data: {
@@ -152,6 +170,14 @@ function showTable() {
     document.getElementById("low").innerHTML = data.quote.dayLow;
     document.getElementById("volume").innerHTML = data.quote.volume;
     document.getElementById("avgVolume").innerHTML = data.quote.avgVolume;
+}
+
+function buy() {
+
+}
+
+function sell(){
+
 }
 
 
