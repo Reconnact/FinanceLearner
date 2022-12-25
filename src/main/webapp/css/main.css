@@ -4,14 +4,7 @@ body {
     height: 100%;
     color: #1B1C1E;
 }
-main {
-    --dot-yellow: #f49c37;
-    --dot-orange: #e65b5b;
-    --dot-pink: #c7247a;
-    --dot-purple: #601d86;
-    margin-left: 10%;
-    margin-right: 10%;
-}
+
 
 a {
     text-decoration: none;

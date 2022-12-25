@@ -65,7 +65,7 @@ function updateWatchlist(){
 
 function showStock() {
     document.getElementById("detailedStock").style.visibility = "visible";
-    document.getElementById("5").style.color = "blue";
+    document.getElementById("5").style.color = "blue"; 
     document.getElementById("loader").style.display = "none";
     document.title = data.name + " (" + data.symbol + ")";
     document.getElementById("star").style.visibility = "visible";
